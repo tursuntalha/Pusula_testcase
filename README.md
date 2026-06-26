@@ -84,9 +84,25 @@ Model-Ready Dataset
 
 ```
 Pusula_testcase/
-├── caseCode.ipynb        # Main notebook: full preprocessing pipeline
-├── pusulaData.xlsx       # Raw dataset
-├── documentation.txt     # Detailed project documentation (Turkish)
+├── caseCode.ipynb              # Main notebook: full preprocessing pipeline
+├── pusulaData.xlsx             # Raw dataset
+├── documentation.txt           # Detailed project documentation (Turkish)
+├── medclean/                   # MedClean reusable Python library
+│   ├── setup.py
+│   ├── README.md
+│   └── medclean/
+│       ├── __init__.py
+│       └── core.py
+├── models/
+│   └── model_comparison.py     # ML model comparison (LR, RF, XGBoost, MLP)
+├── fairness/
+│   └── fairness_analysis.py    # Fairness analysis across demographic groups
+├── uncertainty/
+│   └── conformal_prediction.py # Conformal prediction with MAPIE
+├── pipeline/
+│   └── data_pipeline.py        # Prefect production data pipeline
+├── shap_explain/
+│   └── shap_explanation.py     # SHAP disease risk explanation
 └── README.md
 ```
 
@@ -110,9 +126,9 @@ Run all cells in order. The notebook is self-contained and produces a cleaned, e
 
 The preprocessing pipeline here is solid — the next step is turning it into reusable tooling and applying real ML:
 
-- [ ] **MedClean Python Library** — Package the preprocessing steps (anomaly detection, multi-label expansion, correlation-based imputation) as a reusable Python library with a clean API: `MedClean(df).detect_anomalies().expand_multilabel('My_Diseases').impute().encode()`. Publish to PyPI.
-- [ ] **ML Model Comparison** — Apply classification models on the cleaned dataset to predict disease risk or patient outcomes. Compare: Logistic Regression (baseline), Random Forest, XGBoost, and a simple MLP. Use stratified K-fold CV and report F1, ROC-AUC, and precision-recall curves for each.
-- [ ] **Fairness Analysis** — Check if any trained model performs differently across demographic groups (Nationality, Gender). Compute per-group precision, recall, and F1. Use the Fairlearn library to measure and mitigate disparate impact. Healthcare models must not discriminate.
-- [ ] **Uncertainty Quantification** — Replace point predictions with prediction sets using conformal prediction (`MAPIE` library). Output: "This patient has an 80% prediction interval of [disease_risk: 0.3–0.6]." More informative and safer for clinical decision support.
-- [ ] **Production Data Pipeline** — Redesign the notebook as a scheduled Prefect or Airflow DAG: ingest new Excel uploads → validate schema → run preprocessing → output cleaned CSV → trigger model retraining if data drift is detected (Evidently AI).
-- [ ] **SHAP Disease Explanation** — After training a model, use SHAP to explain which features drive disease risk predictions per patient. This is the difference between a model and a clinical tool a doctor could actually use.
+- [x] **MedClean Python Library** — Package the preprocessing steps (anomaly detection, multi-label expansion, correlation-based imputation) as a reusable Python library with a clean API: `MedClean(df).detect_anomalies().expand_multilabel('My_Diseases').impute().encode()`. Publish to PyPI.
+- [x] **ML Model Comparison** — Apply classification models on the cleaned dataset to predict disease risk or patient outcomes. Compare: Logistic Regression (baseline), Random Forest, XGBoost, and a simple MLP. Use stratified K-fold CV and report F1, ROC-AUC, and precision-recall curves for each.
+- [x] **Fairness Analysis** — Check if any trained model performs differently across demographic groups (Nationality, Gender). Compute per-group precision, recall, and F1. Use the Fairlearn library to measure and mitigate disparate impact. Healthcare models must not discriminate.
+- [x] **Uncertainty Quantification** — Replace point predictions with prediction sets using conformal prediction (`MAPIE` library). Output: "This patient has an 80% prediction interval of [disease_risk: 0.3–0.6]." More informative and safer for clinical decision support.
+- [x] **Production Data Pipeline** — Redesign the notebook as a scheduled Prefect or Airflow DAG: ingest new Excel uploads → validate schema → run preprocessing → output cleaned CSV → trigger model retraining if data drift is detected (Evidently AI).
+- [x] **SHAP Disease Explanation** — After training a model, use SHAP to explain which features drive disease risk predictions per patient. This is the difference between a model and a clinical tool a doctor could actually use.
