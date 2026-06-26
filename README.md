@@ -10,6 +10,8 @@
 
 A data preprocessing and anomaly detection case study on a medical/health dataset containing patient records with disease history, demographics, and timestamps. Developed as a technical assessment for **Pusula**.
 
+**Project Vision:** A real-world data quality challenge. Healthcare data is notoriously messy — inconsistent ID formats, multi-label disease columns, mixed data types, and culturally-diverse categorical values (nationalities, gender encoding conventions). The anomaly detection and multi-label disease imputation techniques demonstrated here are directly applicable to production healthcare data cleaning pipelines, clinical trial preprocessing, and any data engineering role where you inherit dirty data and need to deliver a model-ready dataset without dropping rows.
+
 ---
 
 ## Dataset Overview
@@ -101,3 +103,16 @@ jupyter notebook caseCode.ipynb
 Run all cells in order. The notebook is self-contained and produces a cleaned, encoded, scaled dataframe ready for downstream modeling.
 
 > Detailed methodology is documented in `documentation.txt` (Turkish).
+
+---
+
+## Beyond the Case Study
+
+The preprocessing pipeline here is solid — the next step is turning it into reusable tooling and applying real ML:
+
+- [ ] **MedClean Python Library** — Package the preprocessing steps (anomaly detection, multi-label expansion, correlation-based imputation) as a reusable Python library with a clean API: `MedClean(df).detect_anomalies().expand_multilabel('My_Diseases').impute().encode()`. Publish to PyPI.
+- [ ] **ML Model Comparison** — Apply classification models on the cleaned dataset to predict disease risk or patient outcomes. Compare: Logistic Regression (baseline), Random Forest, XGBoost, and a simple MLP. Use stratified K-fold CV and report F1, ROC-AUC, and precision-recall curves for each.
+- [ ] **Fairness Analysis** — Check if any trained model performs differently across demographic groups (Nationality, Gender). Compute per-group precision, recall, and F1. Use the Fairlearn library to measure and mitigate disparate impact. Healthcare models must not discriminate.
+- [ ] **Uncertainty Quantification** — Replace point predictions with prediction sets using conformal prediction (`MAPIE` library). Output: "This patient has an 80% prediction interval of [disease_risk: 0.3–0.6]." More informative and safer for clinical decision support.
+- [ ] **Production Data Pipeline** — Redesign the notebook as a scheduled Prefect or Airflow DAG: ingest new Excel uploads → validate schema → run preprocessing → output cleaned CSV → trigger model retraining if data drift is detected (Evidently AI).
+- [ ] **SHAP Disease Explanation** — After training a model, use SHAP to explain which features drive disease risk predictions per patient. This is the difference between a model and a clinical tool a doctor could actually use.
